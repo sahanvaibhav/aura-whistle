@@ -4,40 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#070b14">
-<title>Aura — Whistle</title>
+<title>Aura — upload index.html</title>
 <style>
-body{margin:0;background:#05070d;color:#f1f5f9;font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh}
-.box{text-align:center;padding:24px}
-.ring{width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,.12);border-top-color:#22d3ee;animation:s .8s linear infinite;margin:0 auto 16px}
-@keyframes s{to{transform:rotate(360deg)}}
-.s{color:#8b92a7;font-size:13px}
+body{margin:0;background:#05070d;color:#f1f5f9;font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;padding:24px}
+.card{max-width:420px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:24px;line-height:1.5}
+h1{font-size:20px;margin:0 0 12px}
+p{color:#8b92a7;font-size:14px;margin:0 0 12px}
+code{color:#22d3ee;font-size:12px;word-break:break-all}
+ol{color:#f1f5f9;font-size:14px;padding-left:20px}
 </style>
 </head>
 <body>
-<div class="box"><div class="ring"></div><div class="s" id="msg">Loading Aura…</div></div>
-<script>
-(async function(){
-  const n=7;
-  const parts=[];
-  try{
-    for(let i=0;i<n;i++){
-      document.getElementById('msg').textContent='Loading Aura… '+(i+1)+'/'+n;
-      const r=await fetch('part'+i+'.txt');
-      if(!r.ok) throw new Error('part'+i+' HTTP '+r.status);
-      parts.push(await r.text());
-    }
-    const b64=parts.join('');
-    const bin=atob(b64);
-    const bytes=new Uint8Array(bin.length);
-    for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-    const html=new TextDecoder().decode(bytes);
-    document.open();
-    document.write(html);
-    document.close();
-  }catch(e){
-    document.getElementById('msg').textContent='Load failed: '+(e.message||e)+'. Hard-refresh or open repo index.';
-  }
-})();
-</script>
+<div class="card">
+<h1>One free step left</h1>
+<p>Replace this file with the full <b style="color:#fff">index.html</b> from your Aura zip (drag & drop on GitHub — no terminal needed).</p>
+<ol>
+<li>Open <code>github.com/sahanvaibhav/aura-whistle</code></li>
+<li>Click <b>index.html</b> → pencil (Edit)</li>
+<li>Delete everything → paste full file → Commit</li>
+</ol>
+<p style="margin-top:16px">Or drag the full <code>index.html</code> onto the repo page to upload.</p>
+</div>
 </body>
 </html>
