@@ -1,44 +1,31 @@
 # Aura — Whistle
 
-Lifestyle super-app (single-file): **Whistle** social · Circles · Space · Pay · **Ask Aura** (Google Search + Gemini).
+Glass lifestyle hub: Whistle feed, Circles chat, Space devices, Aura Pay (demo), Ask Aura search.
 
-## Live URL (after you enable Pages)
+## Live
 
-https://sahanvaibhav.github.io/aura-whistle/
+**https://sahanvaibhav.github.io/aura-whistle/**
 
-## One-time setup (2 minutes)
+## Use (no setup)
 
-### 1. Enable GitHub Pages
-1. Open https://github.com/sahanvaibhav/aura-whistle/settings/pages  
-2. Under **Build and deployment** → Source → choose **GitHub Actions**  
-3. Wait ~1 minute. The site will be live at the URL above.
+1. Open the link
+2. **Me → Continue with email**
+3. Use Whistle, Circles, Space, Pay, Ask Aura search
 
-### 2. Google (Sign-in + Search)
-1. Open the live site → **Me** → **API & Google settings**  
-2. Paste:
-   - **OAuth Client ID** (Web application type)
-   - **Custom Search API key**
-   - **CX** (Programmable Search Engine ID)
-   - Optional: Gemini API key for AI mode
-3. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials):
-   - Create **OAuth 2.0 Client ID** → Application type: **Web application**
-   - **Authorized JavaScript origins** → add exactly:
-     ```
-     https://sahanvaibhav.github.io
-     ```
-   - Enable **Custom Search API**
-   - Create a search engine at https://programmablesearchengine.google.com (search the whole web) and copy the **cx**
+Search works without API keys (Wikipedia + DuckDuckGo). Google Sign-in / Google results are optional under Settings.
 
-Keys are stored only in your browser `localStorage`. Nothing is sent to any server we control.
+Pay / Scan / QR are **demo only** — no real money.
 
-## Features
-- Whistle: Shorts (video) + Feed + Post (text/photo)
-- Circles: messaging
-- Space: device toggles + weather
-- Aura Pay: local demo wallet
-- Ask Aura: Google Custom Search or Gemini
-- Google Sign-in (GSI) with profile photo
-- Glass UI · no backend required
+## Local
 
-## Local / download
-Open `index.html` in a browser. Google Sign-in will not work on `file://` or plain `http://localhost` until you host on HTTPS and add that origin in Google Cloud.
+Open `index 2.html` (full app) in a browser, or run:
+
+```bash
+python3 -m http.server 8080
+```
+
+## Deploy
+
+GitHub Pages: **Settings → Pages → Deploy from branch `main` / (root)**.
+
+Netlify: connect this repo or drag-and-drop (uses `netlify.toml`).
