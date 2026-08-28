@@ -95,7 +95,7 @@ code{font-size:11px;background:rgba(0,0,0,.3);padding:2px 6px;border-radius:6px}
     <div class="logo">Aura</div>
     <div class="pill" onclick="openSearch()"><span>⌕</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Ask Aura · Google Search</span><span style="margin-left:auto;color:var(--cyan)">✦</span></div>
     <button class="ib" onclick="openM('settingsM')" title="Settings">⚙</button>
-    <div class="av" id="hdrAv">AU</div>
+    <div class="av" id="hdrAv">SV</div>
   </div>
   <div class="live"><span class="dot"></span><span id="liveT">86 online</span><span class="clk" id="clk">--:--</span></div>
 
@@ -128,7 +128,7 @@ code{font-size:11px;background:rgba(0,0,0,.3);padding:2px 6px;border-radius:6px}
     <section class="page" id="chat">
       <div class="row" style="margin-bottom:10px">
         <button class="ib" onclick="go('circles')">←</button>
-        <div class="cav" id="cAv" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">MA</div>
+        <div class="cav" id="cAv" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">SA</div>
         <div class="h" id="cName">Chat</div>
       </div>
       <div class="msgs" id="msgs"></div>
@@ -164,7 +164,7 @@ code{font-size:11px;background:rgba(0,0,0,.3);padding:2px 6px;border-radius:6px}
 
     <section class="page" id="me">
       <div class="prof">
-        <div class="pav2" id="pAv">AU</div>
+        <div class="pav2" id="pAv">SV</div>
         <div class="h" id="pName">Guest</div>
         <div class="s" id="pSub">Not signed in</div>
       </div>
@@ -253,13 +253,13 @@ const $=id=>document.getElementById(id);
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
 const cfg=()=>store.get('aura_cfg',{clientId:'',apiKey:'',cx:'',gemini:''});
 let mode='search',account=store.get('aura_acc',null),bal=store.get('aura_bal',12540.5);
-let txs=store.get('aura_tx',[{n:'Coffee',d:'Today',a:-320},{n:'Refund',d:'Today',a:500}]);
-let posts=store.get('aura_posts',[{user:'Maya',init:'MA',time:'2h',text:'Morning focus stack. What is your ritual?',likes:24}]);
-let chats=store.get('aura_chats',{Maya:[{t:'in',m:'Hey!',time:'8:01 PM'}]});
+let txs=store.get('aura_tx',[{n:'Starbucks',d:'Today',a:-320},{n:'From Sahan',d:'Today',a:1500}]);
+let posts=store.get('aura_posts',[{user:'Sahan',init:'SA',time:'2h',text:'Morning focus stack. What is your ritual?',likes:24}]);
+let chats=store.get('aura_chats',{Sahan:[{t:'in',m:'Hey!',time:'8:01 PM'}]});
 let devices=store.get('aura_dev',[{n:'AC',e:'❄️',on:1},{n:'TV',e:'📺',on:1},{n:'Lights',e:'💡',on:1},{n:'Speaker',e:'🔊',on:0}]);
 let cur=null,tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
 const SHORTS=[{t:'v',s:'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',u:'@mindset',c:'Discipline compounds.'},{t:'v',s:'https://www.w3schools.com/html/mov_bbb.mp4',u:'@growth',c:'Ship small daily.'},{t:'p',s:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',u:'@wander',c:'Blue hour.'}];
-const PEOPLE=[{n:'Maya',i:'MA',c:'linear-gradient(135deg,#8b5cf6,#3b82f6)'},{n:'Kai',i:'KA',c:'linear-gradient(135deg,#ec4899,#8b5cf6)'},{n:'Nora',i:'NO',c:'linear-gradient(135deg,#10b981,#06b6d4)'}];
+const PEOPLE=[{n:'Sahan',i:'SA',c:'linear-gradient(135deg,#8b5cf6,#3b82f6)'},{n:'Santhosh',i:'ST',c:'linear-gradient(135deg,#ec4899,#8b5cf6)'},{n:'Ravi',i:'RA',c:'linear-gradient(135deg,#10b981,#06b6d4)'}];
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast._);toast._=setTimeout(()=>t.classList.remove('on'),2200)}
 function openM(id){loadCfgForm();$(id).classList.add('on')} function closeM(id){$(id).classList.remove('on')}
 document.querySelectorAll('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)m.classList.remove('on')});
@@ -281,7 +281,7 @@ function rDevs(){$('devs').innerHTML=devices.map((d,i)=>`<div class="dev"><div s
 function rPay(){$('bal').textContent='₹'+inr(bal);$('txs').innerHTML=txs.map(t=>`<div class="tx"><div style="flex:1"><div class="h" style="font-size:13px">${t.n}</div><div class="s" style="margin:0">${t.d}</div></div><div class="${t.a>0?'green':'red'}" style="font-weight:700">${t.a>0?'+':''}₹${inr(Math.abs(t.a))}</div></div>`).join('')}
 function doPay(){const a=parseFloat($('amt').value),w=$('upi').value.trim();if(!w||!(a>0)){toast('Enter details');return}if(a>bal){toast('Insufficient');return}bal-=a;txs.unshift({n:'Paid '+w.split(' ')[0],d:'Just now',a:-a});store.set('aura_bal',bal);store.set('aura_tx',txs);rPay();closeM('payM');toast('Paid ₹'+inr(a))}
 function bill(n,a){if(a>bal){toast('Insufficient');return}bal-=a;txs.unshift({n,d:'Just now',a:-a});store.set('aura_bal',bal);store.set('aura_tx',txs);rPay();toast('Paid '+n)}
-function applyAcc(){const name=account?.name||'Guest',email=account?.email||'Not signed in';const init=(name==='Guest'?'AU':name.split(' ').map(w=>w[0]).join('')).slice(0,2).toUpperCase();$('pName').textContent=name;$('pSub').textContent=email+(account?.provider?' · '+account.provider:'');if(account?.picture){$('pAv').innerHTML=`<img src="${account.picture}" alt="">`;$('hdrAv').innerHTML=`<img src="${account.picture}" alt="">`}else{$('pAv').textContent=init;$('hdrAv').textContent=init}}
+function applyAcc(){const name=account?.name||'Guest',email=account?.email||'Not signed in';const init=(name==='Guest'?'SV':name.split(' ').map(w=>w[0]).join('')).slice(0,2).toUpperCase();$('pName').textContent=name;$('pSub').textContent=email+(account?.provider?' · '+account.provider:'');if(account?.picture){$('pAv').innerHTML=`<img src="${account.picture}" alt="">`;$('hdrAv').innerHTML=`<img src="${account.picture}" alt="">`}else{$('pAv').textContent=init;$('hdrAv').textContent=init}}
 function localIn(){const n=$('ln').value.trim(),e=$('le').value.trim();if(!n||!e){toast('Fill fields');return}account={name:n,email:e,provider:'Email'};store.set('aura_acc',account);applyAcc();closeM('localM');toast('Signed in')}
 function signOut(){account=null;store.set('aura_acc',null);applyAcc();toast('Signed out');initGoogle()}
 function parseJwt(t){try{return JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))}catch{return null}}
