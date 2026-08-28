@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#070b14">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://images.unsplash.com https://*.googleusercontent.com https://www.gstatic.com https://*.ggpht.com; media-src 'self' blob: https://interactive-examples.mdn.mozilla.net https://www.w3schools.com; connect-src 'self' https://www.googleapis.com https://api.duckduckgo.com https://api.open-meteo.com https://en.wikipedia.org https://accounts.google.com; frame-src https://accounts.google.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+<title>Aura — Whistle</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+button,input,textarea{font:inherit;color:inherit}
+:root{--bg1:#070b14;--bg2:#0c1220;--card:rgba(255,255,255,.07);--border:rgba(255,255,255,.12);--text:#f1f5f9;--muted:#8b92a7;--cyan:#22d3ee;--blue:#3b82f6;--purple:#8b5cf6;--green:#10b981;--red:#ef4444;--radius:18px;--glass:rgba(12,18,32,.62)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#05070d;color:var(--text)}
+body{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:12px}
+.phone{width:420px;height:900px;max-width:100vw;max-height:100vh;border:1px solid var(--border);border-radius:36px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:linear-gradient(165deg,var(--bg1),var(--bg2));box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.hdr{padding:14px;display:flex;align-items:center;gap:8px}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.5px;background:linear-gradient(120deg,#fff,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pill{flex:1;height:36px;border-radius:999px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:6px;padding:0 12px;font-size:12px;color:var(--muted);cursor:pointer;min-width:0}
+.ib{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;display:grid;place-items:center}
+.av{width:36px;height:36px;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--purple),var(--cyan))}
+.av img{width:100%;height:100%;object-fit:cover}
+.live{padding:0 14px 8px;font-size:11px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:p 1.5s infinite}
+@keyframes p{50%{opacity:.4}}
+.clk{margin-left:auto;color:var(--cyan);font-variant-numeric:tabular-nums}
+.main{flex:1;overflow:auto;padding:4px 14px 96px}
+.main::-webkit-scrollbar{width:0}
+.page{display:none;animation:up .25s ease}
+.page.on{display:block}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tabs{display:flex;gap:6px;margin-bottom:12px;overflow:auto}
+.tab{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--cyan);color:#06202a;border-color:transparent}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px}
+.h{font-size:14px;font-weight:700}.s{font-size:11px;color:var(--muted);margin:2px 0 10px}
+.greet{font-size:20px;font-weight:700}.sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
+.inp{width:100%;border:1px solid var(--border);background:rgba(0,0,0,.2);border-radius:14px;padding:11px 14px;color:var(--text);outline:none;font-size:13px;margin-bottom:8px}
+.short{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--border);background:#000;margin-bottom:12px;min-height:420px}
+.short video,.ph{width:100%;height:420px;object-fit:cover;display:block}
+.ph{background-size:cover;background-position:center}
+.grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent 55%);pointer-events:none}
+.meta{position:absolute;left:14px;right:60px;bottom:14px;color:#fff;z-index:2}
+.meta b{display:block;font-size:13px;margin-bottom:4px}
+.meta span{font-size:12px;line-height:1.35}
+.acts{position:absolute;right:10px;bottom:80px;display:flex;flex-direction:column;gap:10px;z-index:3}
+.sb{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.14);backdrop-filter:blur(12px);color:#fff;display:grid;place-items:center;cursor:pointer}
+.gbuf{position:absolute;inset:0;display:grid;place-items:center;background:rgba(7,11,20,.35);backdrop-filter:blur(10px);z-index:4}
+.ring{width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.12);border-top-color:var(--cyan);animation:spin .85s linear infinite;box-shadow:0 0 20px rgba(34,211,238,.25)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.composer textarea{width:100%;min-height:80px;border-radius:14px;border:1px solid var(--border);background:rgba(0,0,0,.2);color:var(--text);padding:12px;font-size:13px;resize:vertical;outline:none}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.btn{border:none;border-radius:14px;padding:11px 16px;font-weight:700;font-size:13px;cursor:pointer}
+
+.btn{position:relative;overflow:hidden}
+.btn:disabled{opacity:.65;cursor:wait}
+.btn.loading{pointer-events:none}
+.btn.loading .btn-label{opacity:0}
+.btn .spin{display:none;position:absolute;inset:0;place-items:center}
+.btn.loading .spin{display:grid}
+.spin i{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;animation:spin .7s linear infinite}
+
+.bp{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff}
+.bg{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.post{border:1px solid var(--border);background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px}
+.ph2{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.pav{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--blue),var(--cyan))}
+.pb{font-size:13.5px;line-height:1.45;white-space:pre-wrap;margin-bottom:8px}
+.pm{width:100%;border-radius:12px;max-height:220px;object-fit:cover;margin-bottom:8px}
+.pa{display:flex;gap:14px;font-size:12px;color:var(--muted)}
+.pa button{background:none;border:none;color:inherit;cursor:pointer}
+.contact{display:flex;gap:10px;align-items:center;padding:10px;border-radius:14px;cursor:pointer}
+.contact:hover{background:rgba(255,255,255,.04)}
+.cav{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px;position:relative}
+.d{position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;border:2px solid var(--bg1);background:var(--green)}
+.msgs{display:flex;flex-direction:column;gap:6px;min-height:240px;max-height:340px;overflow:auto}
+.m{max-width:78%;padding:10px 12px;border-radius:16px;font-size:13px}
+.mi{align-self:flex-start;background:var(--card)}.mo{align-self:flex-end;background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff}
+.ci{display:flex;gap:6px;margin-top:10px}
+.ci input{flex:1;border-radius:999px;border:1px solid var(--border);background:rgba(0,0,0,.2);color:var(--text);padding:11px 14px;outline:none}
+.send{width:40px;height:40px;border:none;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dev{padding:12px;border-radius:16px;border:1px solid var(--border);background:var(--card)}
+.sw{width:36px;height:20px;background:#334155;border-radius:20px;position:relative;cursor:pointer}
+.sw.on{background:linear-gradient(135deg,var(--purple),var(--cyan))}
+.sw:after{content:"";width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:.2s}
+.sw.on:after{left:18px}
+.gpay{padding:16px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(135deg,rgba(30,41,59,.92),rgba(15,23,42,.96));color:#fff;margin-bottom:12px}
+.bv{font-size:28px;font-weight:800;margin:4px 0 12px}
+.ba{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ba button{background:none;border:none;color:#fff;cursor:pointer;font-size:10px}
+.ba i{display:grid;place-items:center;width:40px;height:40px;margin:0 auto 4px;border-radius:50%;background:rgba(34,211,238,.15);border:1px solid rgba(34,211,238,.25);font-style:normal;color:var(--cyan)}
+.tx{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.tx:last-child{border-bottom:0}
+.green{color:var(--green)}.red{color:var(--red)}
+.navb{position:absolute;bottom:0;left:0;right:0;height:70px;display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--border);background:var(--glass);backdrop-filter:blur(20px);z-index:20}
+.nav{color:var(--muted);font-size:10px;text-align:center;cursor:pointer;padding:6px}
+.nav span{display:block;font-size:16px;margin-bottom:2px}
+.nav.on{color:var(--cyan);font-weight:700}
+.modal{position:absolute;inset:0;display:none;align-items:flex-end;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);z-index:50}
+.modal.on{display:flex}
+.mbox{width:100%;max-height:85%;overflow:auto;background:var(--bg2);border-top:1px solid var(--border);border-radius:22px 22px 0 0;padding:18px}
+.x{float:right;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer}
+.toast{position:absolute;left:50%;bottom:82px;transform:translateX(-50%) translateY(8px);background:var(--bg2);border:1px solid var(--border);padding:10px 16px;border-radius:999px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;z-index:80;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.ov{position:absolute;inset:0;display:none;flex-direction:column;background:rgba(7,11,20,.95);backdrop-filter:blur(16px);z-index:70;padding:14px}
+.ov.on{display:flex}
+.modes{display:flex;gap:6px;margin:10px 0}
+.mode{flex:1;padding:9px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;text-align:center}
+.mode.on{background:rgba(34,211,238,.14);color:var(--cyan);border-color:rgba(34,211,238,.35)}
+.box{flex:1;overflow:auto;border:1px solid var(--border);border-radius:16px;background:var(--card);padding:12px;font-size:13px;line-height:1.5}
+.ri{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.ri a{color:var(--cyan);font-weight:600;text-decoration:none}
+.ri p{color:var(--muted);font-size:12px;margin-top:3px}
+.prof{text-align:center;padding:8px 0 14px}
+.pav2{width:72px;height:72px;margin:0 auto 10px;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-weight:800;font-size:22px;color:#fff;background:linear-gradient(135deg,var(--purple),var(--cyan))}
+.pav2 img{width:100%;height:100%;object-fit:cover}
+#gbtn{display:flex;justify-content:center;min-height:44px;margin:8px 0}
+.hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:8px}
+.mi{display:flex;align-items:center;gap:10px;padding:12px 4px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;background:rgba(34,211,238,.15);color:var(--cyan);margin-left:6px}
+.ok{color:var(--green)}.warn{color:#f59e0b}
+@media(max-width:480px){body{padding:0}.phone{width:100%;height:100vh;max-height:100%;border-radius:0;border:none}}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div class="hdr">
+    <div class="logo">Aura</div>
+    <div class="pill" onclick="openSearch()"><span>⌕</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Ask Aura · Search</span><span style="margin-left:auto;color:var(--cyan)">✦</span></div>
+    <button class="ib" onclick="openM('settingsM')" title="Settings">⚙</button>
+    <div class="av" id="hdrAv">SV</div>
+  </div>
+  <div class="live"><span class="dot"></span><span id="liveT">Live</span><span class="clk" id="clk">--:--</span></div>
+  <main class="main">
+    <section class="page on" id="whistle">
+      <div class="tabs">
+        <button class="tab on" onclick="wTab('shorts',this)">Shorts</button>
+        <button class="tab" onclick="wTab('feed',this)">Feed</button>
+        <button class="tab" onclick="wTab('photos',this)">Photos</button>
+        <button class="tab" onclick="wTab('compose',this)">Post</button>
+      </div>
+      <div id="w-shorts"></div>
+      <div id="w-feed" style="display:none"></div>
+      <div id="w-photos" style="display:none"></div>
+      <div id="w-compose" style="display:none">
+        <div class="card">
+          <div class="h">Create a Whistle</div>
+          <div class="s">Text · photo · short video</div>
+          <textarea id="postText" placeholder="What's the vibe?"></textarea>
+          <input type="file" id="postMedia" accept="image/*,video/*" style="font-size:12px;color:var(--muted);margin-top:8px">
+          <div class="row"><button class="btn bp" style="margin-left:auto" onclick="publish()">Publish</button></div>
+        </div>
+      </div>
+    </section>
+    <section class="page" id="circles">
+      <div class="greet">Circles</div>
+      <div class="sub">6 demo people · tap to chat</div>
+      <div id="contacts"></div>
+    </section>
+    <section class="page" id="chat">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <button class="ib" onclick="sfx('nav');go('circles')">←</button>
+        <div class="cav" id="cAv" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">SA</div>
+        <div class="h" id="cName">Chat</div>
+      </div>
+      <div class="msgs" id="msgs"></div>
+      <div class="ci"><input id="msg" placeholder="Message…" onkeydown="if(event.key==='Enter')send()"><button class="send" onclick="send()">➤</button></div>
+    </section>
+    <section class="page" id="space">
+      <div class="greet">Space</div>
+      <div class="sub">Devices · apps · climate</div>
+      <div class="h" style="margin-bottom:8px">Smart devices</div>
+      <div class="grid" id="devs"></div>
+      <div class="h" style="margin:14px 0 8px">Quick apps</div>
+      <div class="grid" id="appsGrid"></div>
+      <div class="card" style="margin-top:12px">
+        <div class="h">Environment · <span id="city">Local</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;text-align:center">
+          <div class="card" style="margin:0"><div class="h" id="temp">--°</div><div class="s" style="margin:0">Temp</div></div>
+          <div class="card" style="margin:0"><div class="h" id="hum">--%</div><div class="s" style="margin:0">Humidity</div></div>
+          <div class="card" style="margin:0"><div class="h green">Good</div><div class="s" style="margin:0">Air</div></div>
+        </div>
+      </div>
+    </section>
+    <section class="page" id="pay">
+      <div class="greet">Aura Pay</div>
+      <div class="sub">Demo wallet</div>
+      <div class="gpay">
+        <div style="font-size:11px;opacity:.75">BALANCE</div>
+        <div class="bv" id="bal">₹12,540.50</div>
+        <div class="ba">
+          <button onclick="openM('payM')"><i>↗</i>Pay</button>
+          <button onclick="toast('UPI: you@okaxis')"><i>▣</i>QR</button>
+          <button onclick="$('upi').value='demo@upi';$('amt').value='100';openM('payM')"><i>⎘</i>Scan</button>
+          <button onclick="bill('Bill',999)"><i>⚡</i>Bills</button>
+        </div>
+      </div>
+      <div class="card"><div class="h">History</div><div id="txs"></div></div>
+    </section>
+    <section class="page" id="me">
+      <div class="prof">
+        <div class="pav2" id="pAv">SV</div>
+        <div class="h" id="pName">Guest</div>
+        <div class="s" id="pSub">Not signed in</div>
+      </div>
+      <div class="card">
+        <div class="h">You are ready ✓</div>
+        <div class="s" style="margin:6px 0 0">
+          Whistle, Circles, Space, Pay, and web search work now — <b style="color:var(--text)">no API keys needed</b>.
+          Search uses free DuckDuckGo until you add Google keys.
+        </div>
+      </div>
+      <div class="card">
+        <div class="h">Sign in</div>
+        <div class="s">Use email anytime. Google Sign-in is optional (needs a free Client ID).</div>
+        <button class="btn bp" style="width:100%;margin-top:6px" onclick="openM('localM')">Continue with email</button>
+        <div id="gbtn" style="margin-top:10px"></div>
+        <p class="hint" id="gHint"></p>
+      </div>
+      <div class="card">
+        <div class="h">Optional · Google upgrades</div>
+        <div class="s">Search works now with built-in web results. Add Google keys only if you want official Google results or Google Sign-in.</div>
+        <div class="hint" id="statusBox" style="margin-top:8px"></div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn bg" style="flex:1" onclick="openM('settingsM')">⚙ Add keys</button>
+          <button class="btn bg" style="flex:1" onclick="testSearch()">Test Search</button>
+          
+        </div>
+        <div class="hint" id="apiTestOut" style="margin-top:10px;min-height:20px"></div>
+      </div>
+      <div class="card">
+        <div class="mi" onclick="openM('settingsM')"><span>⚙</span><span style="flex:1">API & Google settings</span>›</div>
+        <div class="mi" onclick="signOut()"><span>⎋</span><span style="flex:1;color:var(--red)">Sign out</span>›</div>
+      </div>
+    </section>
+  </main>
+  <nav class="navb">
+    <div class="nav on" onclick="sfx('nav');go('whistle',this)"><span>📯</span>Whistle</div>
+    <div class="nav" onclick="sfx('nav');go('circles',this)"><span>💬</span>Circles</div>
+    <div class="nav" onclick="sfx('nav');go('space',this)"><span>⚡</span>Space</div>
+    <div class="nav" onclick="sfx('nav');go('pay',this)"><span>₹</span>Pay</div>
+    <div class="nav" onclick="sfx('nav');go('me',this)"><span>◉</span>Me</div>
+  </nav>
+
+  <div class="ov" id="searchOv">
+    <div style="display:flex;gap:8px">
+      <input class="inp" id="q" style="margin:0;flex:1" placeholder="Search the web…" onkeydown="if(event.key==='Enter')runQ()">
+      <button class="ib" onclick="closeSearch()">✕</button>
+    </div>
+        <div class="box" id="out">Type a question or topic. Results appear here.</div>
+    <button class="btn bp" style="width:100%;margin-top:12px" id="searchBtn" onclick="runQ()"><span class="btn-label">Search</span><span class="spin"><i></i></span></button>
+  </div>
+
+  <div class="modal" id="settingsM"><div class="mbox">
+    <button class="x" onclick="closeM('settingsM')">✕</button>
+    <div class="h">Google setup</div>
+    <div class="s">Optional. Keys stay only in this browser. Leave blank to keep free DuckDuckGo search + email sign-in.</div>
+    <label class="s">1 · OAuth Client ID (Web application)</label>
+    <input class="inp" id="cfgClient" placeholder="xxxx.apps.googleusercontent.com" autocomplete="off">
+    <label class="s">2 · Custom Search API key</label>
+    <input class="inp" id="cfgKey" placeholder="AIza…" autocomplete="off">
+    <label class="s">3 · Search Engine CX</label>
+    <input class="inp" id="cfgCx" placeholder="Search engine ID (cx=…)" autocomplete="off">
+        <button class="btn bp" style="width:100%;margin-top:4px" onclick="saveCfg()">Save & apply</button>
+    <div class="card" style="margin-top:12px;padding:12px">
+      <div class="h" style="font-size:12px;margin-bottom:6px">Authorized origin (copy this)</div>
+      <code id="originHint" style="display:block;word-break:break-all;color:var(--cyan);font-size:12px"></code>
+      <p class="hint" style="margin-top:8px;margin-bottom:0">
+        Google Cloud → Credentials → your OAuth client → <b>Authorized JavaScript origins</b> → add the origin above.<br>
+        Enable <b>Custom Search API</b>. Create CX at
+        <a href="https://programmablesearchengine.google.com" target="_blank" rel="noopener" style="color:var(--cyan)">programmablesearchengine.google.com</a>
+      </p>
+    </div>
+  </div></div>
+
+  <div class="modal" id="payM"><div class="mbox">
+    <button class="x" onclick="closeM('payM')">✕</button>
+    <div class="h">Send</div>
+    <input class="inp" id="upi" placeholder="Name / UPI">
+    <input class="inp" id="amt" type="number" placeholder="Amount">
+    <button class="btn bp" style="width:100%" onclick="doPay()">Pay</button>
+  </div></div>
+
+  <div class="modal" id="localM"><div class="mbox">
+    <button class="x" onclick="closeM('localM')">✕</button>
+    <div class="h">Email sign-in</div>
+    <input class="inp" id="ln" placeholder="Name">
+    <input class="inp" id="le" placeholder="Email">
+    <button class="btn bp" style="width:100%" onclick="localIn()">Continue</button>
+  </div></div>
+
+  <div class="toast" id="toast"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let actx=null;
+function ensureAudio(){if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)()}catch{}}if(actx&&actx.state==='suspended')actx.resume().catch(()=>{});return actx}
+function sfx(type){const ctx=ensureAudio();if(!ctx)return;const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);const now=ctx.currentTime;const map={tap:[420,.04,'sine',.06],nav:[320,.05,'triangle',.05],success:[520,.08,'sine',.09],send:[600,.06,'sine',.07],err:[180,.12,'sawtooth',.08]};const [freq,dur,wave,vol]=map[type]||map.tap;o.type=wave;o.frequency.setValueAtTime(freq,now);if(type==='success')o.frequency.linearRampToValueAtTime(freq*1.4,now+dur);g.gain.setValueAtTime(vol,now);g.gain.exponentialRampToValueAtTime(.001,now+dur);o.start(now);o.stop(now+dur+.02)}
+document.body.addEventListener('pointerdown',()=>ensureAudio(),{once:true});
+function withLoad(btn,fn,ms=500){if(!btn||btn.classList.contains('loading'))return;btn.classList.add('loading');btn.disabled=true;const done=()=>{btn.classList.remove('loading');btn.disabled=false};Promise.resolve().then(()=>fn()).catch(()=>{}).finally(()=>setTimeout(done,ms))}
+
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const cfg=()=>store.get('aura_cfg',{clientId:'',apiKey:'',cx:''});
+function saveCfg(){
+  const c={clientId:$('cfgClient').value.trim(),apiKey:$('cfgKey').value.trim(),cx:$('cfgCx').value.trim()};
+  store.set('aura_cfg',c); closeM('settingsM'); toast('Settings saved'); initGoogle(); status();
+}
+function loadCfgForm(){const c=cfg();$('cfgClient').value=c.clientId||'';$('cfgKey').value=c.apiKey||'';$('cfgCx').value=c.cx||'';$('originHint').textContent=location.origin}
+
+let account=store.get('aura_acc',null), bal=store.get('aura_bal',12540.5);
+let txs=store.get('aura_tx',[{n:'Starbucks',d:'Today',a:-320},{n:'From Sahan',d:'Today',a:1500}]);
+let posts=store.get('aura_posts',[
+  {id:1,user:'Sahan',init:'SA',time:'2h',text:'Morning focus stack: water, 25-min deep work, no phone.\nWhat is your starter ritual?',likes:42},
+  {id:2,user:'Santhosh',init:'ST',time:'3h',text:'Shipping the Circles chat update tonight. Who wants beta access?',likes:18},
+  {id:3,user:'Ravi',init:'RA',time:'5h',text:'Rain in Bangalore. Perfect coding weather ☔',likes:31},
+  {id:4,user:'Asha',init:'AS',time:'8h',text:'Quick tip: batch your messages at :00 and :30. Focus compounds.',likes:56},
+  {id:5,user:'Arun',init:'AR',time:'12h',text:'New playlist for late-night builds. Link in comments.',likes:22},
+  {id:6,user:'Aura',init:'AU',time:'1d',text:'Whistle is live — text, shorts, photos in one feed. Welcome.',likes:120}
+]);
+let chats=store.get('aura_chats',{
+  Sahan:[{t:'in',m:'Hey! Movie night at 8?',time:'8:01 PM'},{t:'out',m:'I am in. Snacks on me.',time:'8:02 PM'},{t:'in',m:'Perfect 🍿',time:'8:03 PM'}],
+  Santhosh:[{t:'in',m:'Did the deploy go through?',time:'7:40 PM'},{t:'out',m:'Yes — live on Pages.',time:'7:41 PM'}],
+  Ravi:[{t:'in',m:'Coffee tomorrow?',time:'6:15 PM'}],
+  Asha:[{t:'in',m:'Loved your focus post.',time:'5:00 PM'},{t:'out',m:'Thanks! How is your week?',time:'5:05 PM'}],
+  Arun:[{t:'in',m:'Sending the design files.',time:'Yesterday'}],
+  Priya:[{t:'in',m:'Are you joining the call?',time:'Yesterday'}]
+});
+let devices=store.get('aura_dev',[
+  {n:'AC',e:'❄️',on:true},{n:'TV',e:'📺',on:true},{n:'Lights',e:'💡',on:true},
+  {n:'Speaker',e:'🔊',on:false},{n:'Lock',e:'🔒',on:true},{n:'Cam',e:'📷',on:false}
+]);
+let cur=null, tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
+
+const SHORTS=[
+  {t:'video',src:'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',u:'@mindset',c:'Discipline compounds.'},
+  {t:'video',src:'https://www.w3schools.com/html/mov_bbb.mp4',u:'@growth',c:'Ship small daily.'},
+  {t:'photo',src:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',u:'@wander',c:'Blue hour.'}
+];
+const PEOPLE=[
+  {n:'Sahan',i:'SA',c:'linear-gradient(135deg,#8b5cf6,#3b82f6)',st:'Active now'},
+  {n:'Santhosh',i:'ST',c:'linear-gradient(135deg,#ec4899,#8b5cf6)',st:'Typing…'},
+  {n:'Ravi',i:'RA',c:'linear-gradient(135deg,#10b981,#06b6d4)',st:'Online'},
+  {n:'Asha',i:'AS',c:'linear-gradient(135deg,#f59e0b,#ef4444)',st:'2m ago'},
+  {n:'Arun',i:'AR',c:'linear-gradient(135deg,#3b82f6,#8b5cf6)',st:'1h ago'},
+  {n:'Priya',i:'PR',c:'linear-gradient(135deg,#ec4899,#f43f5e)',st:'Yesterday'}
+];
+const APPS=[
+  {n:'Notes',e:'📝'},{n:'Music',e:'🎵'},{n:'Maps',e:'🗺️'},{n:'Calendar',e:'📅'},
+  {n:'Camera',e:'📷'},{n:'Files',e:'📁'},{n:'Health',e:'❤️'},{n:'Shop',e:'🛒'}
+];
+
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast._);toast._=setTimeout(()=>t.classList.remove('on'),2200)}
+function openM(id){loadCfgForm();$(id).classList.add('on')}
+function closeM(id){$(id).classList.remove('on')}
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
+function go(page,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  $(page).classList.add('on');
+  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('on'));
+  if(el) el.classList.add('on');
+  if(page==='me') status();
+}
+function inr(n){return n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function wTab(name,btn){
+  document.querySelectorAll('#whistle .tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  ['shorts','feed','photos','compose'].forEach(k=>$('w-'+k).style.display=k===name?'':'none');
+  if(name==='shorts') rShorts();
+  if(name==='feed') rFeed();
+  if(name==='photos') rPhotos();
+}
+function rShorts(){
+  $('w-shorts').innerHTML=SHORTS.map(s=>{
+    const media=s.t==='video'?`<video src="${s.src}" loop muted playsinline></video>`:`<div class="ph" style="background-image:url('${s.src}')"></div>`;
+    return `<div class="short"><div class="gbuf"><div class="ring"></div></div>${media}<div class="grad"></div>
+      <div class="meta"><b>${s.u}</b><span>${s.c}</span></div>
+      <div class="acts"><button class="sb" onclick="toast('Liked')">♥</button><button class="sb" onclick="share('${s.c.replace(/'/g,"\\'")}')">↗</button></div></div>`;
+  }).join('');
+  document.querySelectorAll('#w-shorts .short').forEach(card=>{
+    const buf=card.querySelector('.gbuf'), v=card.querySelector('video');
+    if(v){v.addEventListener('canplay',()=>buf&&(buf.style.display='none'));
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)v.play().catch(()=>{});else v.pause()}),{threshold:.5});
+      io.observe(card); v.onclick=()=>{v.muted=!v.muted};}
+    else setTimeout(()=>buf&&(buf.style.display='none'),350);
+  });
+}
+function rFeed(){
+  $('w-feed').innerHTML=posts.map(p=>`<article class="post"><div class="ph2"><div class="pav">${p.init}</div><div><div class="h" style="font-size:13px">${esc(p.user)}</div><div class="s" style="margin:0">${p.time||'now'}</div></div></div>
+    <div class="pb">${esc(p.text)}</div>
+    ${p.media?`<img class="pm" src="${p.media}" alt="">`:''}
+    <div class="pa"><button onclick="toast('Liked')">♡ ${p.likes||0}</button><button onclick="share(\`${p.text.replace(/`/g,"'")}\`)">↗ Share</button></div></article>`).join('');
+}
+function rPhotos(){
+  const ph=SHORTS.filter(s=>s.t==='photo');
+  $('w-photos').innerHTML=ph.map(s=>`<div class="short"><div class="gbuf"><div class="ring"></div></div><div class="ph" style="background-image:url('${s.src}')"></div><div class="grad"></div><div class="meta"><b>${s.u}</b><span>${s.c}</span></div></div>`).join('')||'<div class="card s">No photos yet</div>';
+  document.querySelectorAll('#w-photos .gbuf').forEach(b=>setTimeout(()=>b.style.display='none',300));
+}
+function share(t){if(navigator.share)navigator.share({text:t}).catch(()=>navigator.clipboard.writeText(t));else navigator.clipboard.writeText(t);toast('Shared')}
+function publish(){
+  const text=$('postText').value.trim(); const f=$('postMedia').files[0];
+  if(!text&&!f){toast('Add text or media');return}
+  const user=account?.name||'You', init=(user.split(' ').map(w=>w[0]).join('')||'Y').slice(0,2).toUpperCase();
+  const base={id:Date.now(),user,init,time:'now',text:text||'(media)',likes:0};
+  const done=(x={})=>{posts.unshift({...base,...x});store.set('aura_posts',posts);$('postText').value='';$('postMedia').value='';toast('Published');wTab('feed',document.querySelectorAll('#whistle .tab')[1])};
+  if(f){const r=new FileReader();r.onload=()=>done({media:r.result});r.readAsDataURL(f)}else done();
+}
+
+function rContacts(){$('contacts').innerHTML=PEOPLE.map(p=>`<div class="contact" onclick="openChat('${p.n}')"><div class="cav" style="background:${p.c}">${p.i}<span class="d"></span></div><div style="flex:1"><div class="h" style="font-size:13px">${p.n}</div><div class="s" style="margin:0">${p.st||'Online'}</div></div><span style="color:var(--muted);font-size:16px">›</span></div>`).join('')}
+function rApps(){const el=$('appsGrid');if(!el)return;el.innerHTML=APPS.map(a=>`<div class="dev" style="text-align:center;cursor:pointer" onclick="toast('${a.n} opened')"><div style="font-size:28px;margin-bottom:6px">${a.e}</div><div class="h" style="font-size:12px">${a.n}</div></div>`).join('')}
+function openChat(n){cur=n;const p=PEOPLE.find(x=>x.n===n);document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));$('chat').classList.add('on');$('cName').textContent=n;$('cAv').textContent=p.i;$('cAv').style.background=p.c;rMsgs()}
+function rMsgs(){const list=chats[cur]||[];$('msgs').innerHTML=list.map(m=>`<div class="m ${m.t==='out'?'mo':'mi'}">${m.m}</div>`).join('');$('msgs').scrollTop=1e9}
+function send(){const t=$('msg').value.trim();if(!t||!cur)return;if(!chats[cur])chats[cur]=[];chats[cur].push({t:'out',m:t});$('msg').value='';store.set('aura_chats',chats);rMsgs();setTimeout(()=>{chats[cur].push({t:'in',m:'Got it!'});store.set('aura_chats',chats);rMsgs()},700)}
+
+function rDevs(){$('devs').innerHTML=devices.map((d,i)=>`<div class="dev"><div style="display:flex;justify-content:space-between"><span style="font-size:20px">${d.e}</span><div class="sw ${d.on?'on':''}" onclick="devices[${i}].on=!devices[${i}].on;store.set('aura_dev',devices);rDevs();toast(devices[${i}].n+' '+(devices[${i}].on?'ON':'OFF'))"></div></div><div class="h" style="font-size:12px;margin-top:8px">${d.n}</div></div>`).join('')}
+function rPay(){$('bal').textContent='₹'+inr(bal);$('txs').innerHTML=txs.map(t=>`<div class="tx"><div style="flex:1"><div class="h" style="font-size:13px">${t.n}</div><div class="s" style="margin:0">${t.d}</div></div><div class="${t.a>0?'green':'red'}" style="font-weight:700">${t.a>0?'+':''}₹${inr(Math.abs(t.a))}</div></div>`).join('')}
+function doPay(){const a=parseFloat($('amt').value),w=$('upi').value.trim();if(!w||!(a>0)){toast('Enter details');return}if(a>bal){toast('Insufficient');return}bal-=a;txs.unshift({n:'Paid '+w.split(' ')[0],d:'Just now',a:-a});store.set('aura_bal',bal);store.set('aura_tx',txs);rPay();closeM('payM');toast('Paid ₹'+inr(a))}
+function bill(n,a){if(a>bal){toast('Insufficient');return}bal-=a;txs.unshift({n,d:'Just now',a:-a});store.set('aura_bal',bal);store.set('aura_tx',txs);rPay();toast('Paid '+n)}
+
+function applyAcc(){
+  const name=account?.name||'Guest', email=account?.email||'Not signed in';
+  const init=(name==='Guest'?'SV':name.split(' ').map(w=>w[0]).join('')).slice(0,2).toUpperCase();
+  $('pName').textContent=name;$('pSub').textContent=email+(account?.provider?' · '+account.provider:'');
+  if(account?.picture){$('pAv').innerHTML=`<img src="${account.picture}" alt="">`;$('hdrAv').innerHTML=`<img src="${account.picture}" alt="">`}
+  else{$('pAv').textContent=init;$('hdrAv').textContent=init}
+}
+function localIn(){const n=$('ln').value.trim(),e=$('le').value.trim();if(!n||!e){toast('Fill fields');return}account={name:n,email:e,provider:'Email'};store.set('aura_acc',account);applyAcc();closeM('localM');toast('Signed in')}
+function signOut(){account=null;store.set('aura_acc',null);applyAcc();toast('Signed out');initGoogle()}
+function parseJwt(t){try{return JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))}catch{return null}}
+function initGoogle(){
+  const c=cfg(), hint=$('gHint');
+  $('gbtn').innerHTML='';
+  if(!c.clientId){hint.innerHTML='Google button appears after you add a free <b>OAuth Client ID</b> under ⚙ Add keys. Until then, use <b>Continue with email</b>.';return}
+  hint.textContent='Client ID loaded. If the button fails, add this origin in Google Cloud: '+location.origin;
+  const boot=()=>{
+    if(!window.google?.accounts?.id){setTimeout(boot,250);return}
+    try{
+      google.accounts.id.initialize({
+        client_id:c.clientId,
+        callback:(res)=>{
+          const p=parseJwt(res.credential);
+          if(!p){toast('Sign-in failed');return}
+          account={name:p.name||p.email,email:p.email,picture:p.picture,provider:'Google'};
+          store.set('aura_acc',account);applyAcc();toast('Signed in with Google');
+        }
+      });
+      google.accounts.id.renderButton($('gbtn'),{theme:'outline',size:'large',shape:'pill',text:'signin_with',width:300});
+    }catch(e){hint.textContent='Google init error: '+(e.message||e)}
+  };
+  boot();
+}
+
+function openSearch(){$('searchOv').classList.add('on');$('q').focus()}
+function closeSearch(){$('searchOv').classList.remove('on')}
+
+async function runQ(){
+  const q=$('q').value.trim(); if(!q) return;
+  const out=$('out');
+  const btn=$('searchBtn');
+  if(btn){btn.classList.add('loading');btn.disabled=true}
+  out.innerHTML='<div style="display:grid;place-items:center;padding:24px"><div class="ring"></div><div class="s" style="margin-top:10px">Searching…</div></div>';
+  try{ await gsearch(q,out); if(typeof sfx==='function') sfx('success'); }
+  catch{ out.innerHTML='<div class="s">Could not load results. Try another query.</div>'; if(typeof sfx==='function') sfx('err'); }
+  finally{ if(btn){btn.classList.remove('loading');btn.disabled=false} }
+}
+async function gsearch(q,out){
+  const c=cfg();
+  if(c.apiKey && c.cx){
+    try{
+      const url=`https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(c.apiKey)}&cx=${encodeURIComponent(c.cx)}&q=${encodeURIComponent(q)}&num=8`;
+      const res=await fetch(url);
+      const data=await res.json();
+      if(res.ok && data.items && data.items.length){
+        out.innerHTML=`<div class="h" style="margin-bottom:8px">Results · “${esc(q)}”</div>`+
+          data.items.map(it=>`<div class="ri"><a href="${it.link}" target="_blank" rel="noopener">${esc(it.title)}</a><p>${esc(it.snippet||'')}</p></div>`).join('');
+        return;
+      }
+    }catch{}
+  }
+  let html=`<div class="h" style="margin-bottom:8px">Results · “${esc(q)}”</div>`;
+  try{
+    const wiki=await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(q.replace(/\s+/g,'_'))).then(r=>r.ok?r.json():null).catch(()=>null);
+    if(wiki&&wiki.extract){html+=`<div class="ri"><a href="${wiki.content_urls?.desktop?.page||'#'}" target="_blank" rel="noopener">${esc(wiki.title||q)}</a><p>${esc(wiki.extract)}</p></div>`}
+  }catch{}
+  try{
+    const ddg=await fetch('https://api.duckduckgo.com/?q='+encodeURIComponent(q)+'&format=json&no_html=1&skip_disambig=1').then(r=>r.json());
+    if(ddg.AbstractText) html+=`<div class="ri"><a href="${ddg.AbstractURL||'#'}" target="_blank" rel="noopener">${esc(ddg.Heading||'Overview')}</a><p>${esc(ddg.AbstractText)}</p></div>`;
+    (ddg.RelatedTopics||[]).flatMap(t=>t.Topics||[t]).filter(t=>t.Text).slice(0,6).forEach(t=>{
+      html+=`<div class="ri"><a href="${t.FirstURL||'#'}" target="_blank" rel="noopener">${esc((t.Text||'').split(' - ')[0])}</a><p>${esc(t.Text||'')}</p></div>`;
+    });
+  }catch{}
+  if(!html.includes('class="ri"')) html+='<div class="s">No results. Try different words.</div>';
+  out.innerHTML=html;
+}
+
+
+function status(){
+  const c=cfg();
+  const row=(label,ok,note)=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span>${label}</span><span class="${ok?'ok':'warn'}">${note}</span></div>`;
+  $('statusBox').innerHTML=
+    row('This site',true,`<code style="font-size:10px">${location.origin}</code>`)+
+    row('Google Sign-in',!!c.clientId,c.clientId?'connected':'optional — not set')+
+    row('Search',true,'Ready')+
+    row('Google results',!!(c.apiKey&&c.cx),(c.apiKey&&c.cx)?'connected':'built-in')+
+    
+}
+async function testSearch(){
+  const out=$('apiTestOut'); out.innerHTML='<span class="s">Testing search…</span>';
+  try{
+    const c=cfg();
+    if(c.apiKey&&c.cx){
+      const res=await fetch(`https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(c.apiKey)}&cx=${encodeURIComponent(c.cx)}&q=hello&num=1`);
+      const data=await res.json();
+      if(!res.ok) throw new Error(data.error?.message||('HTTP '+res.status));
+      out.innerHTML='<span class="ok">Search OK</span> — '+esc(data.items?.[0]?.title||'got results');
+    }else{
+      const ddg=await fetch('https://api.duckduckgo.com/?q=hello&format=json&no_html=1').then(r=>r.json());
+      out.innerHTML='<span class="warn">No Google keys</span> — DuckDuckGo fallback works'+(ddg.Heading?': '+esc(ddg.Heading):'');
+    }
+  }catch(e){out.innerHTML='<span class="red">Search error: '+esc(e.message||e)+'</span>'}
+}
+
+function tick(){try{$('clk').textContent=new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:tz}).format(new Date())}catch{$('clk').textContent=new Date().toLocaleTimeString()}}
+setInterval(tick,1000);tick();
+setInterval(()=>{$('liveT').textContent=(4+Math.floor(Math.random()*7))+' online'},4000);
+
+(function(){
+  applyAcc(); rShorts(); rContacts(); rDevs(); rApps(); rPay(); initGoogle(); status();
+  if(navigator.geolocation)navigator.geolocation.getCurrentPosition(async pos=>{
+    try{const w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current=temperature_2m,relative_humidity_2m`).then(r=>r.json());
+      if(w.current){$('temp').textContent=Math.round(w.current.temperature_2m)+'°';$('hum').textContent=Math.round(w.current.relative_humidity_2m)+'%'}
+    }catch{}
+  });
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=12.97&longitude=77.59&current=temperature_2m,relative_humidity_2m').then(r=>r.json()).then(w=>{
+    if(w.current&&$('temp').textContent==='--°'){$('temp').textContent=Math.round(w.current.temperature_2m)+'°';$('hum').textContent=Math.round(w.current.relative_humidity_2m)+'%'}
+  }).catch(()=>{});
+})();
+</script>
+</body>
+</html>
