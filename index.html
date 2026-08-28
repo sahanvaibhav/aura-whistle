@@ -2,27 +2,149 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aura</title>
-<style>body{margin:0;background:#070b14;color:#94a3b8;font-family:system-ui;display:grid;place-items:center;min-height:100vh}</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Aura — Whistle</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root{--bg:#070b14;--bg2:#0c1220;--card:rgba(255,255,255,.07);--bd:rgba(255,255,255,.12);--tx:#f1f5f9;--mu:#8b92a7;--c:#22d3ee;--p:#8b5cf6;--g:#10b981;--r:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{min-height:100vh;background:#05070d;color:var(--tx);display:flex;justify-content:center}
+.phone{width:420px;max-width:100vw;height:100vh;max-height:900px;background:linear-gradient(165deg,var(--bg),var(--bg2));border:1px solid var(--bd);display:flex;flex-direction:column;position:relative;overflow:hidden}
+.hdr{display:flex;gap:8px;align-items:center;padding:12px}
+.logo{font-weight:800;font-size:20px;background:linear-gradient(120deg,#fff,var(--c));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pill{flex:1;height:36px;border-radius:999px;border:1px solid var(--bd);background:var(--card);display:flex;align-items:center;padding:0 12px;font-size:12px;color:var(--mu);cursor:pointer;gap:6px}
+.ib,.av{width:36px;height:36px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;display:grid;place-items:center}
+.av{border:0;overflow:hidden;font-size:11px;font-weight:800;background:linear-gradient(135deg,var(--p),var(--c));color:#fff}
+.av img{width:100%;height:100%;object-fit:cover}
+.live{padding:0 12px 8px;font-size:11px;color:var(--mu);display:flex;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--g)}.clk{margin-left:auto;color:var(--c)}
+.main{flex:1;overflow:auto;padding:4px 12px 90px}.page{display:none}.page.on{display:block}
+.tabs{display:flex;gap:6px;margin-bottom:10px;overflow:auto}
+.tab{padding:8px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--mu);font-size:12px;font-weight:600;cursor:pointer}
+.tab.on{background:var(--c);color:#06202a;border-color:transparent}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:10px}
+.h{font-weight:700;font-size:14px}.s{font-size:11px;color:var(--mu);margin:2px 0 8px}
+.inp{width:100%;border:1px solid var(--bd);background:#0003;border-radius:12px;padding:10px 12px;color:var(--tx);margin-bottom:8px;outline:0}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+.bp{background:linear-gradient(135deg,var(--p),var(--c));color:#fff}.bg{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.short{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--bd);background:#000;margin-bottom:12px;min-height:380px}
+.short video,.ph{width:100%;height:380px;object-fit:cover;display:block}.ph{background-size:cover;background-position:center}
+.grad{position:absolute;inset:0;background:linear-gradient(to top,#000d,transparent 55%);pointer-events:none}
+.meta{position:absolute;left:12px;right:56px;bottom:12px;color:#fff;z-index:2;font-size:12px}
+.acts{position:absolute;right:8px;bottom:70px;display:flex;flex-direction:column;gap:8px;z-index:3}
+.sb{width:40px;height:40px;border-radius:50%;border:1px solid #fff3;background:#fff2;color:#fff;cursor:pointer}
+.gbuf{position:absolute;inset:0;display:grid;place-items:center;background:#070b1455;backdrop-filter:blur(8px);z-index:4}
+.ring{width:48px;height:48px;border-radius:50%;border:2px solid #fff2;border-top-color:var(--c);animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.post{border:1px solid var(--bd);background:var(--card);border-radius:14px;padding:12px;margin-bottom:8px}
+.row{display:flex;gap:8px;align-items:center}.pav{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;background:linear-gradient(135deg,#3b82f6,var(--c));color:#fff}
+.contact{display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;cursor:pointer}
+.cav{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px}
+.msgs{display:flex;flex-direction:column;gap:6px;min-height:200px;max-height:300px;overflow:auto}
+.m{max-width:78%;padding:9px 12px;border-radius:14px;font-size:13px}.mi{align-self:flex-start;background:var(--card)}.mo{align-self:flex-end;background:linear-gradient(135deg,var(--p),var(--c));color:#fff}
+.ci{display:flex;gap:6px;margin-top:8px}.ci input{flex:1;border-radius:999px;border:1px solid var(--bd);background:#0003;color:var(--tx);padding:10px 12px;outline:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dev{padding:12px;border-radius:14px;border:1px solid var(--bd);background:var(--card)}
+.sw{width:34px;height:18px;background:#334155;border-radius:20px;position:relative;cursor:pointer}.sw.on{background:linear-gradient(135deg,var(--p),var(--c))}
+.sw:after{content:"";width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:.2s}.sw.on:after{left:18px}
+.gpay{padding:14px;border-radius:16px;border:1px solid #fff2;background:linear-gradient(135deg,#1e293be6,#0f172af2);margin-bottom:10px;color:#fff}
+.bv{font-size:26px;font-weight:800;margin:4px 0 10px}.ba{display:grid;grid-template-columns:repeat(4,1fr)}.ba button{background:0;border:0;color:#fff;font-size:10px;cursor:pointer}
+.navb{position:absolute;bottom:0;left:0;right:0;height:68px;display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--bd);background:#0c1220cc;backdrop-filter:blur(16px)}
+.nav{color:var(--mu);font-size:10px;text-align:center;cursor:pointer}.nav span{display:block;font-size:15px}.nav.on{color:var(--c);font-weight:700}
+.modal{position:absolute;inset:0;display:none;align-items:flex-end;background:#0008;z-index:50}.modal.on{display:flex}
+.mbox{width:100%;max-height:85%;overflow:auto;background:var(--bg2);border-radius:20px 20px 0 0;padding:16px;border-top:1px solid var(--bd)}
+.x{float:right;width:28px;height:28px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}
+.toast{position:absolute;left:50%;bottom:78px;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--bd);padding:9px 14px;border-radius:999px;font-size:12px;opacity:0;transition:.25s;z-index:80;pointer-events:none}.toast.on{opacity:1}
+.ov{position:absolute;inset:0;display:none;flex-direction:column;background:#070b14f2;z-index:70;padding:12px}.ov.on{display:flex}
+.modes{display:flex;gap:6px;margin:8px 0}.mode{flex:1;padding:8px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--mu);font-size:12px;font-weight:600;cursor:pointer;text-align:center}.mode.on{background:#22d3ee22;color:var(--c)}
+.box{flex:1;overflow:auto;border:1px solid var(--bd);border-radius:14px;background:var(--card);padding:12px;font-size:13px;line-height:1.45}
+.ri{padding:8px 0;border-bottom:1px solid #fff1}.ri a{color:var(--c);font-weight:600;text-decoration:none}.ri p{color:var(--mu);font-size:12px;margin-top:2px}
+.prof{text-align:center;padding:8px 0}.pav2{width:68px;height:68px;margin:0 auto 8px;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-weight:800;font-size:20px;background:linear-gradient(135deg,var(--p),var(--c));color:#fff}.pav2 img{width:100%;height:100%;object-fit:cover}
+#gbtn{display:flex;justify-content:center;min-height:40px;margin:8px 0}
+.hint{font-size:11px;color:var(--mu);line-height:1.4;margin-top:6px}.ok{color:var(--g)}.warn{color:#f59e0b}
+</style>
 </head>
 <body>
-<div id="s">Loading Aura…</div>
+<div class="phone">
+<div class="hdr"><div class="logo">Aura</div><div class="pill" onclick="openSearch()"><span>⌕</span><span>Ask Aura · Google</span></div><button class="ib" onclick="openM('setM')">⚙</button><div class="av" id="hdrAv">SV</div></div>
+<div class="live"><span class="dot"></span><span>Online</span><span class="clk" id="clk">--:--</span></div>
+<main class="main">
+<section class="page on" id="whistle">
+<div class="tabs"><button class="tab on" onclick="wTab('shorts',this)">Shorts</button><button class="tab" onclick="wTab('feed',this)">Feed</button><button class="tab" onclick="wTab('compose',this)">Post</button></div>
+<div id="w-shorts"></div><div id="w-feed" style="display:none"></div>
+<div id="w-compose" style="display:none"><div class="card"><div class="h">Create Whistle</div><textarea class="inp" id="postText" rows="3" placeholder="What's the vibe?"></textarea><input type="file" id="postMedia" accept="image/*" style="font-size:12px;color:var(--mu)"><button class="btn bp" style="width:100%;margin-top:8px" onclick="publish()">Publish</button></div></div>
+</section>
+<section class="page" id="circles"><div class="h" style="font-size:18px">Circles</div><div id="contacts"></div></section>
+<section class="page" id="chat"><div class="row" style="margin-bottom:8px"><button class="ib" onclick="go('circles')">←</button><div class="cav" id="cAv" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">SA</div><div class="h" id="cName">Chat</div></div><div class="msgs" id="msgs"></div><div class="ci"><input id="msg" placeholder="Message…" onkeydown="if(event.key==='Enter')send()"><button class="btn bp" onclick="send()">➤</button></div></section>
+<section class="page" id="space"><div class="h" style="font-size:18px">Space</div><div class="grid" id="devs"></div><div class="card" style="margin-top:10px"><div class="h">Climate</div><div class="row" style="justify-content:space-around;margin-top:8px"><div><div class="h" id="temp">--°</div><div class="s">Temp</div></div><div><div class="h" id="hum">--%</div><div class="s">Humidity</div></div></div></div></section>
+<section class="page" id="pay"><div class="h" style="font-size:18px">Aura Pay</div><div class="gpay"><div style="font-size:11px;opacity:.7">BALANCE</div><div class="bv" id="bal">₹12,540.50</div><div class="ba"><button onclick="openM('payM')">Pay</button><button onclick="toast('you@okaxis')">QR</button><button onclick="$('upi').value='demo@upi';$('amt').value=100;openM('payM')">Scan</button><button onclick="bill(999)">Bill</button></div></div><div class="card"><div class="h">History</div><div id="txs"></div></div></section>
+<section class="page" id="me"><div class="prof"><div class="pav2" id="pAv">SV</div><div class="h" id="pName">Guest</div><div class="s" id="pSub">Not signed in</div></div>
+<div class="card"><div class="h">Sign in with Google</div><div id="gbtn"></div><button class="btn bg" style="width:100%" onclick="openM('locM')">Email instead</button><p class="hint" id="gHint"></p></div>
+<div class="card"><button class="btn bg" style="width:100%;margin-bottom:8px" onclick="openM('setM')">API & Google settings</button><button class="btn bg" style="width:100%;color:var(--r)" onclick="signOut()">Sign out</button></div>
+<div class="card"><div class="h">Status</div><div class="hint" id="status"></div></div></section>
+</main>
+<nav class="navb"><div class="nav on" onclick="go('whistle',this)"><span>📯</span>Whistle</div><div class="nav" onclick="go('circles',this)"><span>💬</span>Circles</div><div class="nav" onclick="go('space',this)"><span>⚡</span>Space</div><div class="nav" onclick="go('pay',this)"><span>₹</span>Pay</div><div class="nav" onclick="go('me',this)"><span>◉</span>Me</div></nav>
+<div class="ov" id="sov"><div class="row"><input class="inp" id="q" style="margin:0;flex:1" placeholder="Search Google…" onkeydown="if(event.key==='Enter')runQ()"><button class="ib" onclick="closeSearch()">✕</button></div>
+<div class="modes"><button class="mode on" id="mS" onclick="setMode('search')">Google Search</button><button class="mode" id="mA" onclick="setMode('ai')">Gemini AI</button></div>
+<div class="box" id="out">Add Google API key + CX in Settings for live Google results.</div>
+<button class="btn bp" style="width:100%;margin-top:10px" onclick="runQ()">Go</button></div>
+<div class="modal" id="setM"><div class="mbox"><button class="x" onclick="closeM('setM')">✕</button><div class="h">Google API settings</div>
+<input class="inp" id="cfgClient" placeholder="OAuth Client ID">
+<input class="inp" id="cfgKey" placeholder="Custom Search API key">
+<input class="inp" id="cfgCx" placeholder="Search Engine CX">
+<input class="inp" id="cfgGem" placeholder="Gemini API key (optional)">
+<button class="btn bp" style="width:100%" onclick="saveCfg()">Save & apply</button>
+<p class="hint">Authorized JavaScript origins must include:<br><code id="origin"></code></p></div></div>
+<div class="modal" id="payM"><div class="mbox"><button class="x" onclick="closeM('payM')">✕</button><div class="h">Send</div><input class="inp" id="upi" placeholder="Name / UPI"><input class="inp" id="amt" type="number" placeholder="Amount"><button class="btn bp" style="width:100%" onclick="doPay()">Pay</button></div></div>
+<div class="modal" id="locM"><div class="mbox"><button class="x" onclick="closeM('locM')">✕</button><div class="h">Email sign-in</div><input class="inp" id="ln" placeholder="Name"><input class="inp" id="le" placeholder="Email"><button class="btn bp" style="width:100%" onclick="localIn()">Continue</button></div></div>
+<div class="toast" id="toast"></div>
+</div>
 <script>
-(async()=>{
-  try{
-    const n = 6;
-    let b64 = '';
-    for(let i=0;i<n;i++){
-      const t = await fetch('./part'+i+'.txt').then(r=>r.text());
-      b64 += t.trim();
-    }
-    const html = decodeURIComponent(escape(atob(b64)));
-    document.open(); document.write(html); document.close();
-  }catch(e){
-    document.getElementById('s').textContent = 'Load failed: '+e.message;
-  }
-})();
+const $=id=>document.getElementById(id);
+const st={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const cfg=()=>st.get('aura_cfg',{clientId:'',apiKey:'',cx:'',gemini:''});
+let mode='search',account=st.get('aura_acc',null),bal=st.get('aura_bal',12540.5);
+let txs=st.get('aura_tx',[{n:'Starbucks',d:'Today',a:-320}]);
+let posts=st.get('aura_posts',[{user:'Sahan',init:'SA',time:'2h',text:'Focus stack: water + deep work.',likes:12}]);
+let chats=st.get('aura_chats',{Sahan:[{t:'in',m:'Hey!'}]});
+let devices=st.get('aura_dev',[{n:'AC',e:'❄️',on:1},{n:'TV',e:'📺',on:1},{n:'Lights',e:'💡',on:1},{n:'Speaker',e:'🔊',on:0}]);
+let cur=null,tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
+const SHORTS=[{t:'v',s:'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',u:'@mindset',c:'Discipline compounds.'},{t:'v',s:'https://www.w3schools.com/html/mov_bbb.mp4',u:'@growth',c:'Ship small daily.'},{t:'p',s:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',u:'@wander',c:'Blue hour.'}];
+const PPL=[{n:'Sahan',i:'SA',c:'linear-gradient(135deg,#8b5cf6,#3b82f6)'},{n:'Santhosh',i:'ST',c:'linear-gradient(135deg,#ec4899,#8b5cf6)'}];
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast._);toast._=setTimeout(()=>t.classList.remove('on'),2000)}
+function openM(id){loadCfg();$(id).classList.add('on')} function closeM(id){$(id).classList.remove('on')}
+document.querySelectorAll('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)m.classList.remove('on')});
+function go(p,el){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));$(p).classList.add('on');document.querySelectorAll('.nav').forEach(n=>n.classList.remove('on'));if(el)el.classList.add('on');if(p==='me')status()}
+function inr(n){return n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c]))}
+function loadCfg(){const c=cfg();$('cfgClient').value=c.clientId||'';$('cfgKey').value=c.apiKey||'';$('cfgCx').value=c.cx||'';$('cfgGem').value=c.gemini||'';$('origin').textContent=location.origin}
+function saveCfg(){st.set('aura_cfg',{clientId:$('cfgClient').value.trim(),apiKey:$('cfgKey').value.trim(),cx:$('cfgCx').value.trim(),gemini:$('cfgGem').value.trim()});closeM('setM');toast('Saved');initGoogle();status()}
+function wTab(n,b){document.querySelectorAll('#whistle .tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');['shorts','feed','compose'].forEach(k=>$('w-'+k).style.display=k===n?'':'none');if(n==='shorts')rShorts();if(n==='feed')rFeed()}
+function rShorts(){$('w-shorts').innerHTML=SHORTS.map(s=>{const m=s.t==='v'?`<video src="${s.s}" loop muted playsinline></video>`:`<div class="ph" style="background-image:url('${s.s}')"></div>`;return `<div class="short"><div class="gbuf"><div class="ring"></div></div>${m}<div class="grad"></div><div class="meta"><b>${s.u}</b><br>${s.c}</div><div class="acts"><button class="sb" onclick="toast('Liked')">♥</button><button class="sb" onclick="share('${s.c}')">↗</button></div></div>`}).join('');document.querySelectorAll('#w-shorts .short').forEach(card=>{const b=card.querySelector('.gbuf'),v=card.querySelector('video');if(v){v.oncanplay=()=>b&&(b.style.display='none');const io=new IntersectionObserver(es=>es.forEach(e=>{e.isIntersecting?v.play().catch(()=>{}):v.pause()}),{threshold:.5});io.observe(card)}else setTimeout(()=>b&&(b.style.display='none'),300)})}
+function rFeed(){$('w-feed').innerHTML=posts.map(p=>`<div class="post"><div class="row"><div class="pav">${p.init}</div><div><div class="h" style="font-size:13px">${esc(p.user)}</div><div class="s">${p.time||'now'}</div></div></div><div style="font-size:13px;margin:8px 0;white-space:pre-wrap">${esc(p.text)}</div>${p.media?`<img src="${p.media}" style="width:100%;border-radius:10px;max-height:180px;object-fit:cover">`:''}<button class="btn bg" onclick="share('${esc(p.text).slice(0,80)}')">Share</button></div>`).join('')}
+function share(t){if(navigator.share)navigator.share({text:t}).catch(()=>navigator.clipboard.writeText(t));else navigator.clipboard.writeText(t);toast('Shared')}
+function publish(){const t=$('postText').value.trim(),f=$('postMedia').files[0];if(!t&&!f){toast('Add text or photo');return}const user=account?.name||'You',init=(user.split(' ').map(w=>w[0]).join('')||'Y').slice(0,2).toUpperCase();const base={user,init,time:'now',text:t||'(photo)',likes:0};const done=(x={})=>{posts.unshift({...base,...x});st.set('aura_posts',posts);$('postText').value='';$('postMedia').value='';toast('Published');wTab('feed',document.querySelectorAll('#whistle .tab')[1])};if(f){const r=new FileReader();r.onload=()=>done({media:r.result});r.readAsDataURL(f)}else done()}
+function rContacts(){$('contacts').innerHTML=PPL.map(p=>`<div class="contact" onclick="openChat('${p.n}')"><div class="cav" style="background:${p.c}">${p.i}</div><div class="h" style="font-size:13px">${p.n}</div></div>`).join('')}
+function openChat(n){cur=n;const p=PPL.find(x=>x.n===n);document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));$('chat').classList.add('on');$('cName').textContent=n;$('cAv').textContent=p.i;$('cAv').style.background=p.c;rMsgs()}
+function rMsgs(){const L=chats[cur]||[];$('msgs').innerHTML=L.map(m=>`<div class="m ${m.t==='out'?'mo':'mi'}">${m.m}</div>`).join('');$('msgs').scrollTop=1e9}
+function send(){const t=$('msg').value.trim();if(!t||!cur)return;if(!chats[cur])chats[cur]=[];chats[cur].push({t:'out',m:t});$('msg').value='';st.set('aura_chats',chats);rMsgs();setTimeout(()=>{chats[cur].push({t:'in',m:'Got it!'});st.set('aura_chats',chats);rMsgs()},600)}
+function rDevs(){$('devs').innerHTML=devices.map((d,i)=>`<div class="dev"><div class="row" style="justify-content:space-between"><span style="font-size:20px">${d.e}</span><div class="sw ${d.on?'on':''}" onclick="devices[${i}].on=!devices[${i}].on;st.set('aura_dev',devices);rDevs()"></div></div><div class="h" style="font-size:12px;margin-top:6px">${d.n}</div></div>`).join('')}
+function rPay(){$('bal').textContent='₹'+inr(bal);$('txs').innerHTML=txs.map(t=>`<div class="row" style="justify-content:space-between;padding:8px 0;border-bottom:1px solid #fff1"><div><div class="h" style="font-size:13px">${t.n}</div><div class="s">${t.d}</div></div><div style="font-weight:700;color:${t.a>0?'var(--g)':'var(--r)'}">${t.a>0?'+':''}₹${inr(Math.abs(t.a))}</div></div>`).join('')}
+function doPay(){const a=parseFloat($('amt').value),w=$('upi').value.trim();if(!w||!(a>0)){toast('Enter details');return}if(a>bal){toast('Insufficient');return}bal-=a;txs.unshift({n:'Paid '+w.split(' ')[0],d:'Just now',a:-a});st.set('aura_bal',bal);st.set('aura_tx',txs);rPay();closeM('payM');toast('Paid ₹'+inr(a))}
+function bill(a){if(a>bal){toast('Insufficient');return}bal-=a;txs.unshift({n:'Bill',d:'Just now',a:-a});st.set('aura_bal',bal);st.set('aura_tx',txs);rPay();toast('Paid')}
+function applyAcc(){const name=account?.name||'Guest',email=account?.email||'Not signed in';const init=(name==='Guest'?'G':name.split(' ').map(w=>w[0]).join('')).slice(0,2).toUpperCase();$('pName').textContent=name;$('pSub').textContent=email+(account?.provider?' · '+account.provider:'');if(account?.picture){$('pAv').innerHTML=`<img src="${account.picture}">`;$('hdrAv').innerHTML=`<img src="${account.picture}">`}else{$('pAv').textContent=init;$('hdrAv').textContent=init}}
+function localIn(){const n=$('ln').value.trim(),e=$('le').value.trim();if(!n||!e){toast('Fill fields');return}account={name:n,email:e,provider:'Email'};st.set('aura_acc',account);applyAcc();closeM('locM');toast('Signed in')}
+function signOut(){account=null;st.set('aura_acc',null);applyAcc();toast('Signed out');initGoogle()}
+function parseJwt(t){try{return JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))}catch{return null}}
+function initGoogle(){const c=cfg();$('gbtn').innerHTML='';if(!c.clientId){$('gHint').innerHTML='Open <b>Settings</b>, paste OAuth Web Client ID. Origin: <code>'+location.origin+'</code>';return}$('gHint').textContent='Client ID loaded · origin '+location.origin;const boot=()=>{if(!window.google?.accounts?.id){setTimeout(boot,300);return}try{google.accounts.id.initialize({client_id:c.clientId,callback:res=>{const p=parseJwt(res.credential);if(!p){toast('Sign-in failed');return}account={name:p.name||p.email,email:p.email,picture:p.picture,provider:'Google'};st.set('aura_acc',account);applyAcc();toast('Signed in with Google')}});google.accounts.id.renderButton($('gbtn'),{theme:'outline',size:'large',shape:'pill',text:'signin_with',width:280})}catch(e){$('gHint').textContent='Google error: '+(e.message||e)}};boot()}
+function openSearch(){$('sov').classList.add('on');$('q').focus()} function closeSearch(){$('sov').classList.remove('on')}
+function setMode(m){mode=m;$('mS').classList.toggle('on',m==='search');$('mA').classList.toggle('on',m==='ai')}
+async function runQ(){const q=$('q').value.trim();if(!q)return;const out=$('out');out.innerHTML='<div style="display:grid;place-items:center;padding:20px"><div class="ring"></div></div>';try{if(mode==='ai')await gemini(q,out);else await gsearch(q,out)}catch(e){out.innerHTML='<div style="color:var(--r)">'+esc(e.message||'Error')+'</div>'}}
+async function gsearch(q,out){const c=cfg();if(c.apiKey&&c.cx){const res=await fetch(`https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(c.apiKey)}&cx=${encodeURIComponent(c.cx)}&q=${encodeURIComponent(q)}&num=8`);const data=await res.json();if(!res.ok)throw new Error(data.error?.message||('HTTP '+res.status));const items=data.items||[];if(!items.length){out.innerHTML='<div class="s">No results</div>';return}out.innerHTML=`<div class="h" style="margin-bottom:6px">Google · “${esc(q)}”</div>`+items.map(it=>`<div class="ri"><a href="${it.link}" target="_blank" rel="noopener">${esc(it.title)}</a><p>${esc(it.snippet||'')}</p></div>`).join('');return}const ddg=await fetch('https://api.duckduckgo.com/?q='+encodeURIComponent(q)+'&format=json&no_html=1&skip_disambig=1').then(r=>r.json());let html=`<div class="h">Web · “${esc(q)}”</div><p class="hint warn">Add Google API key + CX in Settings for official Google results.</p>`;if(ddg.AbstractText)html+=`<div class="ri"><a href="${ddg.AbstractURL||'#'}" target="_blank">${esc(ddg.Heading||'Overview')}</a><p>${esc(ddg.AbstractText)}</p></div>`;(ddg.RelatedTopics||[]).flatMap(t=>t.Topics||[t]).filter(t=>t.Text).slice(0,5).forEach(t=>{html+=`<div class="ri"><a href="${t.FirstURL||'#'}" target="_blank">${esc((t.Text||'').split(' - ')[0])}</a><p>${esc(t.Text||'')}</p></div>`});out.innerHTML=html}
+async function gemini(q,out){const c=cfg();if(!c.gemini){out.innerHTML='<div class="s">Add Gemini API key in Settings, or use Google Search.</div>';return}const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(c.gemini)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:q}]}],generationConfig:{maxOutputTokens:512}})});const data=await res.json();if(!res.ok)throw new Error(data.error?.message||('HTTP '+res.status));const text=data?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('\n')||'No answer';out.innerHTML=`<div class="h">Gemini</div><div style="white-space:pre-wrap;margin-top:6px">${esc(text)}</div>`}
+function status(){const c=cfg();$('status').innerHTML=`Origin: <code>${location.origin}</code><br>Client ID: <span class="${c.clientId?'ok':'warn'}">${c.clientId?'saved':'missing'}</span><br>Search key: <span class="${c.apiKey?'ok':'warn'}">${c.apiKey?'saved':'missing'}</span><br>CX: <span class="${c.cx?'ok':'warn'}">${c.cx?'saved':'missing'}</span>`}
+function tick(){try{$('clk').textContent=new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:tz}).format(new Date())}catch{$('clk').textContent=new Date().toLocaleTimeString()}}
+setInterval(tick,1000);tick();
+(function(){applyAcc();rShorts();rContacts();rDevs();rPay();initGoogle();status();
+fetch('https://api.open-meteo.com/v1/forecast?latitude=12.97&longitude=77.59&current=temperature_2m,relative_humidity_2m').then(r=>r.json()).then(w=>{if(w.current){$('temp').textContent=Math.round(w.current.temperature_2m)+'°';$('hum').textContent=Math.round(w.current.relative_humidity_2m)+'%'} }).catch(()=>{})})();
 </script>
 </body>
 </html>
